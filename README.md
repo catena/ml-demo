@@ -1,63 +1,64 @@
+
 Decision Tree
 -------------
-RandomForest  
-ExtraTrees  
-AdaBoost  
-XGBoost  
-Blending  
-Bagging  
+RandomForest - forests.py  
+ExtraTrees - forests.py  
+AdaBoost - boosting.py  
+XGBoost - boosting.py  
+Blending - blending.py  
+Bagging - bagged-knn.py
   
   
 Regression  
 ----------
-OLS  
-Lasso  
-Ridge  
-ElasticNet  
-LARS  
-LOESS  
+OLS - sklearn-docs/plot\_ols.py  
+Lasso - glmnet.R  
+Ridge - glmnet.R  
+ElasticNet - glmnet.R  
+LARS - lars.py  
+LOESS - loess.R    
 
-PCR  
-PLSR  
+PCR - pcr.R  
+PLSR - plsr.R  
 
 
 Instance based
 --------------
-KNN  
+KNN - bagged-knn.py  
 
 
 Clustering
 ----------
-PAM  
-k-Means  
-Heirarchial Clust  
+PAM - clustering.R  
+k-Means - clustering.R  
+Heirarchial Clust - clustering.R  
 
 
 Dimensionality Reduction
 ------------------------
-PCA
+PCA - pca.R
 
 
 Discriminant Analysis
 ---------------------
-LDA  
-QDA  
+LDA - disc-analysis.R  
+QDA - disc-analysis.R  
 
 NaiveBayes
 ----------
-NaiveBayes  
+NaiveBayes - naivebayes.py  
 
 Rule based
 ----------
-Cubist  
-M5-Rules  
-OneR  
-RIPPER  
+Cubist - rules.R  
+M5-Rules - rules.R  
+OneR - rules.R  
+RIPPER - rules.R  
 
 Neural Network
 --------------
-MultiLayerPerceptron  
-CNN 
+MultiLayerPerceptron - perceptron.py  
+CNN - cnn.py  
 
 
 
