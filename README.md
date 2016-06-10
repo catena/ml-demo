@@ -1,27 +1,69 @@
-RandomForest
-ExtraTrees
-AdaBoost
-XGBoost
-Blending
-Bagging
+Decision Tree
+-------------
+RandomForest  
+ExtraTrees  
+AdaBoost  
+XGBoost  
+Blending  
+Bagging  
+  
+  
+Regression  
+----------
+OLS  
+Lasso  
+Ridge  
+ElasticNet  
+LARS  
+LOESS  
 
-Lasso
-Ridge
-ElasticNet
-LARS
+PCR  
+PLSR  
 
-PCR
-PLSR
 
-KNN
+Instance based
+--------------
+KNN  
 
-PAM
-k-Means
-Heirarchial Clust
 
+Clustering
+----------
+PAM  
+k-Means  
+Heirarchial Clust  
+
+
+Dimensionality Reduction
+------------------------
 PCA
 
-LDA
-QDA
+
+Discriminant Analysis
+---------------------
+LDA  
+QDA  
 
 NaiveBayes
+----------
+NaiveBayes  
+
+Rule based
+----------
+Cubist  
+M5-Rules  
+OneR  
+RIPPER  
+
+Neural Network
+--------------
+MultiLayerPerceptron  
+CNN 
+
+
+
+
+
+
+
+
+ 
