@@ -1,0 +1,84 @@
+---
+title: "OLS Regression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ISLR)
+library(ggplot2)
+library(GGally)
+data(Carseats)
+model.data <- Carseats[, c("Sales", "CompPrice", "Income", "Advertising", "Price", 
+                       "ShelveLoc", "Age")]
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+Demonstrates how a linear regression model can be fitted in R. Given a data set ${\{y_{i},\,x_{i1},\ldots ,x_{ip}\}_{i=1}^{n}}$ of n statistical units, the model takes the form:
+$$
+y_{i}=\beta _{1}x_{i1}+\cdots +\beta _{p}x_{ip}+\varepsilon _{i}=\mathbf {x} _{i}^{\rm {T}}{\boldsymbol {\beta }}+\varepsilon _{i},\qquad i=1,\ldots ,n,
+$$
+where,  
+$y_{i}$ is the response variable,  
+$x_{i1},\,x_{i2},\,\ldots ,\,x_{ip}$ are the regressors,  
+$\beta$ is a p-dimensional parameter vector (estimated by least-squares method)  
+$\epsilon_{i}$ is the error term.
+
+## Dataset
+
+A simulated data set containing sales of child car seats at 400 different stores.
+
+- **Sales**: Unit sales (in thousands) at each location
+- **CompPrice**: Price charged by competitor at each location
+- **Income**: Community income level (in thousands of dollars)
+- **Advertising**: Local advertising budget for company at each location (in thousands of dollars)
+- **Price**: Price company charges for car seats at each site
+- **ShelveLoc**: A factor with levels Bad, Good and Medium indicating the quality of the shelving location for the car seats at each site
+- **Age**: Average age of the local population
+
+```{r carseats}
+head(model.data)
+```
+
+## Fitting the Model
+
+We will regress the *Sales* variable onto *CompPrice, Income, Advertising, Price, ShelveLoc, and Age*. A linear model is fitted by least-squares, which minimizes the sum of squared residuals and  leads to a closed-form expression for the estimated value of the unknown parameter $\boldsymbol \beta$.  
+
+Objective:
+$$
+{\hat {\boldsymbol {\beta }}}={\rm {arg}}\min _{\boldsymbol \beta }\,\lVert \mathbf {y}-\mathbf {X}{\boldsymbol \beta } \rVert ,
+$$
+
+which leads to:
+$$
+{\hat {\boldsymbol {\beta }}}=(\mathbf {X} ^{\rm {T}}\mathbf {X} )^{-1}\mathbf {X} ^{\rm {T}}\mathbf {y} ={\big (}\,{\textstyle \sum }\mathbf {x} _{i}\mathbf {x} _{i}^{\rm {T}}\,{\big )}^{-1}{\big (}\,{\textstyle \sum }\mathbf {x} _{i}y_{i}\,{\big )}.
+$$
+
+```{r createmodel}
+model <- lm(Sales ~ CompPrice + Income + Advertising + Price + 
+              ShelveLoc + Age, data = model.data)
+model$coefficients
+```
+
+```{r summary, echo=FALSE}
+model.summ <- summary(model)
+```
+
+Adjusted R-squared: `r model.summ$adj.r.squared`  
+F-statistic: `r model.summ$fstatistic[1]`
+
+```{r residualplot, echo=FALSE}
+plot(model, which = 1)    # residual plot
+```
+
+```{r predictsales}
+# sales vs predicted sales
+head(data.frame(Sales = model.data$Sales, PredictedSales = predict(model)), 10)
+```
+
+
+
+
+
+
