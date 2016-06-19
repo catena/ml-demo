@@ -1,6 +1,9 @@
 ---
 title: "Clustering"
-output: html_document
+output: 
+  html_document: 
+    css: ../css/custom.css
+    theme: readable
 ---
 
 ```{r setup, include=FALSE}

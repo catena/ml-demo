@@ -1,6 +1,9 @@
 ---
 title: "OLS Regression"
-output: html_document
+output: 
+  html_document: 
+    theme: readable
+    css: ../css/custom.css
 ---
 
 ```{r setup, include=FALSE}
