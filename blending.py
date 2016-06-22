@@ -7,6 +7,7 @@ Created on Sun Jun  5 17:56:31 2016
 
 from __future__ import division
 import numpy as np
+from sklearn.datasets import make_classification
 from sklearn.cross_validation import StratifiedKFold
 from sklearn.cross_validation import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -34,8 +35,8 @@ def blend(clfs, blend_clf, n_folds, X, y, X_submission):
         print('logloss:', score)
         dataset_blend_test[:,j] = dataset_blend_test_j.mean(1)
     print("Blending.")
-    clf.fit(dataset_blend_train, y)
-    y_submission = clf.predict_proba(dataset_blend_test)[:,1]
+    blend_clf.fit(dataset_blend_train, y)
+    y_submission = blend_clf.predict_proba(dataset_blend_test)[:,1]
     return y_submission
 
 
