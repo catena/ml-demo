@@ -12,6 +12,7 @@ library(ggplot2)
 library(ISLR)
 data(Hitters)
 knitr::opts_chunk$set(echo = TRUE)
+set.seed(10108)
 ```
 
 ********************************************************************************
