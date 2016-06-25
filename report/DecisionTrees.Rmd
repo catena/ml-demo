@@ -1,0 +1,77 @@
+---
+title: "Decision Trees"
+output: 
+  html_document: 
+    theme: readable
+    css: ../css/custom.css
+---
+
+```{r setup, include=FALSE}
+library(rpart)
+library(rattle)
+library(rpart.plot)
+library(RWeka)
+library(partykit)
+library(MASS)
+library(RColorBrewer)
+library(caret)
+data(iris)
+.pardefault <- par(no.readonly = T)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dataset
+
+__iris__: The famous Fisher's iris data set provided as a data frame with 150 cases (rows) and 5 variables (columns) named _Sepal.Length_, _Sepal.Width_, _Petal.Length_, _Petal.Width_, and _Species_.
+
+```{r data}
+head(iris)
+```
+
+```{r dataplot, echo=FALSE, fig.width=5, fig.height=4}
+pcolors <- brewer.pal(length(levels(iris$Species)), "Set1")
+pcolors <- adjustcolor(pcolors, alpha = 0.5)
+par(mar = c(2, 2, 1, 2))
+parcoord(iris[,1:4] , col = pcolors[as.numeric(iris$Species)])
+par(.pardefault)
+```
+
+## CART
+
+```{r cart}
+cart.model <- rpart(Species ~., data = iris, 
+                    control = rpart.control(minbucket = 10, cp = 0))
+nodes.summ <- summary(cart.model, file = tempfile())$frame
+subset(nodes.summ, select = -yval2)
+confusionMatrix(predict(cart.model, type = "class"), iris$Species)$table
+```
+
+```{r cartplot, echo=FALSE, fig.width=6, fig.height=4}
+fancyRpartPlot(cart.model, sub = "")
+```
+
+## C4.5
+
+```{r c45model}
+c45.model <- J48(Species ~ ., data = iris,
+                 control = Weka_control(R = TRUE, M = 10))
+summary(c45.model)
+```
+
+```{r c45plot, echo=FALSE, fig.width=7, fig.height=5}
+plot(c45.model)
+```
+
+## Conditional Inference Trees
+
+```{r ctreemodel}
+ctree.model <- ctree(Species ~ ., data = iris,
+                     control = ctree_control(minbucket = 10))
+confusionMatrix(predict(ctree.model), iris$Species)$table
+```
+
+```{r ctreeplot, echo=FALSE}
+plot(ctree.model)
+```
+
+
