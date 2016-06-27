@@ -1,0 +1,7 @@
+---
+title: "A Tour of Machine Learning Algorithms"
+author: "Vishnu"
+date: "27 June 2016"
+output: html_document
+---
+

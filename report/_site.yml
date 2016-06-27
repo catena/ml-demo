@@ -1,0 +1,14 @@
+name: "Machine Learning"
+css: custom.css
+output_dir: ../_site
+include: ["../css/custom.css"]
+exclude: ["*.ipynb", "*.py", "Makefile"]
+output:
+  html_document:
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+    theme: cosmo
+    highlight: textmate
+    
+

@@ -1,0 +1,21 @@
+title: "Machine Learning"
+type: inverse
+left:
+  - text: "Home"
+    href: index.html
+  - text: "Algorithm"
+    menu:
+      - text: "OLS Regression"
+        href: OLSRegression.html
+      - text: "Regularization"
+        href: Regularization.html
+      - text: "Clustering"
+        href: clustering.html
+      - text: "Decision Trees"
+        href: DecisionTrees.html
+      - text: "Ensemble Learning"
+        href: Ensemble.html
+      - text: "Naive Bayes"
+        href: nbayes.html
+      - text: "Rule based Learning"
+        href: rules.html
