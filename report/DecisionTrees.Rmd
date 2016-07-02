@@ -74,15 +74,15 @@ CART methodology consists of three parts:
 3. Classification of new data using constructed tree
 
 ```{r cart}
-cart.model <- rpart(Species ~., data = iris, 
+model.cart <- rpart(Species ~., data = iris, 
                     control = rpart.control(minbucket = 10, cp = 0))
-nodes.summ <- summary(cart.model, file = tempfile())$frame
+nodes.summ <- summary(model.cart, file = tempfile())$frame
 subset(nodes.summ, select = -yval2)
-confusionMatrix(predict(cart.model, type = "class"), iris$Species)$table
+confusionMatrix(predict(model.cart, type = "class"), iris$Species)$table
 ```
 
 ```{r cartplot, echo=FALSE, fig.width=6, fig.height=4}
-fancyRpartPlot(cart.model, sub = "")
+fancyRpartPlot(model.cart, sub = "")
 ```
 
 
@@ -103,32 +103,54 @@ The tree construction algorithm is similar to CART. Notable differences include:
   gain\_ratio(X) = gain(X) \,/\, split\_info(X)
   $$
 
-- Like CART applies post pruning to simplify results. Given a confidence interval $CF$ (default 25%), let $N$ be the number of observed samples, and $E$ denote the resubstitution error rate $f = E/N$. The prediction error is estimated as $N \times U_{CF}(E, N)$, where $U_{CF}(E, N)$ is the upper confidence limit from binomial distribution $B(N, f)$.
+- Like CART applies post pruning to simplify results. Given a confidence interval $CF$ (default 25%), let $N$ be the number of training instances in a leaf, and $E$ denote the resubstitution error rate $f = E/N$. The prediction error is estimated as $N \times U_{CF}(E, N)$, where $U_{CF}(E, N)$ is the upper confidence limit from binomial distribution $B(N, f)$.
 
 - Offers windowing, construction of trees for subsets of large training data. If resulting tree is not accurate enough to classify the cases out of the window, then an enlarged window is considered iteratively until convergence.
 
 - Reduction of number of outcomes of multivalued attributes by finding value groups.
 
 ```{r c45model}
-c45.model <- J48(Species ~ ., data = iris,
+model.c45 <- J48(Species ~ ., data = iris,
                  control = Weka_control(R = TRUE, M = 10))
-summary(c45.model)
+summary(model.c45)
 ```
 
 ```{r c45plot, echo=FALSE, fig.width=7, fig.height=5}
-plot(c45.model)
+plot(model.c45)
 ```
 
 ## Conditional Inference Trees
 
+_ctree_ uses permutation tests for variable selection and a separate splitting procedure which can be based on any split criterion.
+
+* In step 1, we select the covariate with minimum $P$-value, i.e., the covariate $X_{j^*}$ with ${argmin}_{j^* = 1,\ldots,m} \, P_j$, where
+$$
+P_j = \mathbb P_{H_0^j}(c({\mathbf T}_j(L_n, \mathbf w), \mu_j, \Sigma_j) \ge
+                        c({\mathbf t}_j, \mu_j, \Sigma_j) \mid S(L_n, \mathbf w))
+$$
+denotes $P$-value of the conditional test for $H_0^j$  (partial null hypothesis of independence between the covariate $X_j$ and $Y$).  
+$c$ is a univariate test statistic mapping an observed multivariate linear statistic $t \in \mathbb R^{pq}$ into the real line.
+$\mathbf T$ is a linear statistic which measures the association between $Y$ and $X_j$:
+$$
+\mathbf T_j(L_n, \mathbf w) = vec \left( \sum_{i=1}^n w_i g_j(X_{ji}) h(Y_i, (Y_1, \ldots, Y_n))^T \right) \in \mathbb R^{p_j q}
+$$
+where $g_j : \chi_j \rightarrow \mathbb R_{p_j}$ is a non random transformation of the covariate $X_j$,  
+$h: \Upsilon \times \Upsilon^j \rightarrow \mathbb R_q$ is the influence function.  
+$\mu_j \in \mathbb R^{p_j q}$ is the conditional expectation, and $\Sigma_j \in \mathbb R^{p_j q \times p_j q}$ the covariance of $\mathbf T_j(L_n, \mathbf w)$ under $H_0 = \bigcap_{j=1}^m H_0^j$, given all permutations $S(L_n, \mathbf w)$ of the elements $(1, \ldots, n)$ with corresponding case weights $w_i = 1$.
+
+* In step 2, the goodness of split is evaluated by a two-sample linear statistic $\mathbf T_{j^*}^A$ which is a special case of $\mathbf T_j$ with $g_{j^*}(X_{j^*i}) = I(X_{j^*i} \in A)$, where $A \subset \chi_{j^*}$. The split $A^*$ with a test statistic maximized over all possible subsets $A$ is established:
+$$
+A^* = \underset {A} {\arg \max} \, c(\mathbf t_{j^*}^A, \mu_{j^*}^A, \Sigma_{j^*}^A).
+$$
+
 ```{r ctreemodel}
-ctree.model <- ctree(Species ~ ., data = iris,
+model.ctree <- ctree(Species ~ ., data = iris,
                      control = ctree_control(minbucket = 10))
-confusionMatrix(predict(ctree.model), iris$Species)$table
+confusionMatrix(predict(model.ctree), iris$Species)$table
 ```
 
 ```{r ctreeplot, echo=FALSE}
-plot(ctree.model)
+plot(model.ctree)
 ```
 
 

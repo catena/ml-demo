@@ -8,7 +8,6 @@ output:
     toc_depth: 3
     toc_float:
       collapsed: false
-    theme: cosmo
-    highlight: textmate
-    
+    theme: readable
+
 
