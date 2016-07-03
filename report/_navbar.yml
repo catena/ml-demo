@@ -13,6 +13,8 @@ left:
         href: clustering.html
       - text: "Decision Trees"
         href: DecisionTrees.html
+      - text: "Neural Networks"
+        href: nnet.html
       - text: "Ensemble Learning"
         href: Ensemble.html
       - text: "Naive Bayes"
