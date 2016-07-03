@@ -20,6 +20,7 @@ library(reshape2)
 data(iris)
 .pardefault <- par(no.readonly = T)
 knitr::opts_chunk$set(echo = TRUE)
+set.seed(8812)
 ```
 
 
@@ -125,20 +126,20 @@ _ctree_ uses permutation tests for variable selection and a separate splitting p
 
 * In step 1, we select the covariate with minimum $P$-value, i.e., the covariate $X_{j^*}$ with ${argmin}_{j^* = 1,\ldots,m} \, P_j$, where
 $$
-P_j = \mathbb P_{H_0^j}(c({\mathbf T}_j(L_n, \mathbf w), \mu_j, \Sigma_j) \ge
-                        c({\mathbf t}_j, \mu_j, \Sigma_j) \mid S(L_n, \mathbf w))
+P_j = \mathbb P_{H_0^j}(c({\mathbf T}_j(\mathcal {L_n}, \mathbf w), \mu_j, \Sigma_j) \ge
+                        c({\mathbf t}_j, \mu_j, \Sigma_j) \mid S(\mathcal {L_n}, \mathbf w))
 $$
 denotes $P$-value of the conditional test for $H_0^j$  (partial null hypothesis of independence between the covariate $X_j$ and $Y$).  
 $c$ is a univariate test statistic mapping an observed multivariate linear statistic $t \in \mathbb R^{pq}$ into the real line.
 $\mathbf T$ is a linear statistic which measures the association between $Y$ and $X_j$:
 $$
-\mathbf T_j(L_n, \mathbf w) = vec \left( \sum_{i=1}^n w_i g_j(X_{ji}) h(Y_i, (Y_1, \ldots, Y_n))^T \right) \in \mathbb R^{p_j q}
+\mathbf T_j(\mathcal {L_n}, \mathbf w) = vec \left( \sum_{i=1}^n w_i g_j(X_{ji}) h(Y_i, (Y_1, \ldots, Y_n))^T \right) \in \mathbb R^{p_j q}
 $$
-where $g_j : \chi_j \rightarrow \mathbb R_{p_j}$ is a non random transformation of the covariate $X_j$,  
-$h: \Upsilon \times \Upsilon^j \rightarrow \mathbb R_q$ is the influence function.  
-$\mu_j \in \mathbb R^{p_j q}$ is the conditional expectation, and $\Sigma_j \in \mathbb R^{p_j q \times p_j q}$ the covariance of $\mathbf T_j(L_n, \mathbf w)$ under $H_0 = \bigcap_{j=1}^m H_0^j$, given all permutations $S(L_n, \mathbf w)$ of the elements $(1, \ldots, n)$ with corresponding case weights $w_i = 1$.
+where $g_j : \mathcal X_j \rightarrow \mathbb R_{p_j}$ is a non random transformation of the covariate $X_j$,  
+$h: \mathcal Y \times \mathcal Y^j \rightarrow \mathbb R_q$ is the influence function.  
+$\mu_j \in \mathbb R^{p_j q}$ is the conditional expectation, and $\Sigma_j \in \mathbb R^{p_j q \times p_j q}$ the covariance of $\mathbf T_j(\mathcal {L_n}, \mathbf w)$ under $H_0 = \bigcap_{j=1}^m H_0^j$, given all permutations $S(\mathcal {L_n}, \mathbf w)$ of the elements $(1, \ldots, n)$ with corresponding case weights $w_i = 1$.
 
-* In step 2, the goodness of split is evaluated by a two-sample linear statistic $\mathbf T_{j^*}^A$ which is a special case of $\mathbf T_j$ with $g_{j^*}(X_{j^*i}) = I(X_{j^*i} \in A)$, where $A \subset \chi_{j^*}$. The split $A^*$ with a test statistic maximized over all possible subsets $A$ is established:
+* In step 2, the goodness of split is evaluated by a two-sample linear statistic $\mathbf T_{j^*}^A$ which is a special case of $\mathbf T_j$ with $g_{j^*}(X_{j^*i}) = I(X_{j^*i} \in A)$, where $A \subset \mathcal X_{j^*}$. The split $A^*$ with a test statistic maximized over all possible subsets $A$ is established:
 $$
 A^* = \underset {A} {\arg \max} \, c(\mathbf t_{j^*}^A, \mu_{j^*}^A, \Sigma_{j^*}^A).
 $$
