@@ -4,8 +4,8 @@ left:
     href: index.html
   - text: "Algorithm"
     menu:
-      - text: "OLS Regression"
-        href: OLSRegression.html
+      - text: "Regression"
+        href: Regression.html
       - text: "Regularization"
         href: Regularization.html
       - text: "Clustering"
