@@ -26,7 +26,7 @@ blobs$y <- as.factor(blobs$y)
 
 ## Dataset
 
-Three simulated datasets *noisy.circles*, *noisy.moons*, *blobs* of 1500 observations x 2 features containing 2, 2, and 3 clusters respectively.
+Three simulated datasets `noisy.circles`, `noisy.moons`, `blobs` of 1500 observations x 2 features containing 2, 2, and 3 clusters respectively.
 
 ```{r descdata}
 head(noisy.circles)

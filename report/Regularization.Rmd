@@ -22,7 +22,7 @@ set.seed(10108)
 Demonstrate various regularization techniques used in regression analysis.  
 
 ##### Ordinary Least Squares
-[OLS regression](/OLSRegression.html) fits a linear model with coefficients $w = (w_1, ..., w_p)$ to minimize the RSS between the observed and the predicted responses.  
+OLS regression fits a linear model with coefficients $w = (w_1, ..., w_p)$ to minimize the RSS between the observed and the predicted responses.  
 
 Mathematically, it tries to minimize the objective function:  
 $$
@@ -64,7 +64,7 @@ str(model.data)
 
 ## Fitting the Models
 
-We will use the R *glmnet* package for regressing the *Salary* of the baseball players. In *glmnet*, the penalty on the coefficient vector is defined as
+We will use the R `glmnet` package for regressing the _Salary_ of the baseball players. In `glmnet`, the penalty on the coefficient vector is defined as
 $$
 \frac{1-\alpha}{2} ||\beta_j||_2^2 + \alpha\, ||\beta_j||_2,
 $$

@@ -20,19 +20,19 @@ set.seed(1)
 
 ## Dataset
 
-__mtcars__: Fuel consumption and 10 aspects of automobile design and performance for 32 automobiles. A data frame with 32 observations on 11 variables:
+`mtcars`: Fuel consumption and 10 aspects of automobile design and performance for 32 automobiles. A data frame with 32 observations on 11 variables:
 
-*	__mpg__:	 Miles/(US) gallon
-*	__cyl__:	 Number of cylinders
-*	__disp__:	 Displacement (cu.in.)
-* __hp__:	 Gross horsepower
-* __drat__:	 Rear axle ratio
-* __wt__:	 Weight (1000 lbs)
-* __qsec__:	 1/4 mile time
-* __vs__:	 V/S
-* __am__:	 Transmission (0 = automatic, 1 = manual)
-* __gear__:	 Number of forward gears
-* __carb__:	 Number of carburetors
+*	_mpg_:	 Miles/(US) gallon
+*	_cyl_:	 Number of cylinders
+*	_disp_:	 Displacement (cu.in.)
+* _hp_:	 Gross horsepower
+* _drat_:	 Rear axle ratio
+* _wt_:	 Weight (1000 lbs)
+* _qsec_:	 1/4 mile time
+* _vs_:	 V/S
+* _am_:	 Transmission (0 = automatic, 1 = manual)
+* _gear_:	 Number of forward gears
+* _carb_:	 Number of carburetors
 
 ```{r data_mtcars}
 head(mtcars)
@@ -65,13 +65,13 @@ with(mtcars.sp, {
 })
 ```
 
-__iris__: Gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. A data frame with 150 cases (rows) and 5 variables (columns) named:
+`iris`: Gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. A data frame with 150 cases (rows) and 5 variables (columns) named:
 
-* __Sepal.Length__
-* __Sepal.Width__
-* __Petal.Length__
-* __Petal.Width__
-* __Species__
+* _Sepal.Length_
+* _Sepal.Width_
+* _Petal.Length_
+* _Petal.Width_
+* _Species_
 
 ```{r data_iris}
 head(iris)

@@ -26,7 +26,7 @@ set.seed(8812)
 
 ## Dataset
 
-__iris__: The famous Fisher's iris data set provided as a data frame with 150 cases (rows), and 5 variables (columns) named _Sepal.Length_, _Sepal.Width_, _Petal.Length_, _Petal.Width_, and _Species_.
+`iris`: The famous Fisher's iris data set provided as a data frame with 150 cases (rows), and 5 variables (columns) named _Sepal.Length_, _Sepal.Width_, _Petal.Length_, _Petal.Width_, and _Species_.
 
 ```{r data}
 head(iris)
