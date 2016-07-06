@@ -20,3 +20,6 @@ left:
         href: nbayes.html
       - text: "Rule based Learning"
         href: rules.html
+      - text: "Dimensionality Reduction"
+        href: DimReduction.html
+        

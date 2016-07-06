@@ -1,0 +1,133 @@
+---
+title: "Dimensionality Reduction"
+output: 
+  html_document: 
+    theme: readable
+    css: ../css/custom.css
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(network)
+library(GGally)
+library(MASS)
+library(RColorBrewer)
+data(iris)
+data(UScitiesD)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+set.seed(1208151)
+
+# y <- sapply(data()$results[,3], function(x) { 
+#   data(list = x); try(dim(eval(parse(text = x))), silent = T) 
+# })
+# y[sapply(y, function(x) is.numeric(x) && (length(x) == 2) && 
+#                         (x[1] < 20) && (x[2] > 4))]
+```
+
+---
+
+## LDA
+
+```{r lda}
+model.lda <- lda(Species ~ ., iris, prior = c(1, 1, 1) / 3)
+model.lda$means
+model.lda$scaling
+model.lda$svd
+```
+
+```{r ldaplot, echo=FALSE}
+require(scales)
+require(gridExtra)
+
+pca <- prcomp(iris[,-5])
+prop.pca <- pca$sdev^2 / sum(pca$sdev^2)
+
+prop.lda <- model.lda$svd^2 / sum(model.lda$svd^2)
+pred.lda <- predict(model.lda)
+
+dataset <- data.frame(Species = iris[, "Species"], 
+                      pca = pca$x, lda = pred.lda$x)
+
+p1 <- ggplot(dataset) + 
+  geom_point(aes(lda.LD1, lda.LD2, colour = Species, shape = Species), 
+             size = 1.5) + 
+  labs(x = paste0("LD1 (", percent(prop.lda[1]), ")"),
+       y = paste0("LD2 (", percent(prop.lda[2]), ")"),
+       title = "LDA Projection") +
+  theme_bw(base_size = 8)
+
+p2 <- ggplot(dataset) + 
+  geom_point(aes(pca.PC1, pca.PC2, colour = Species, shape = Species), 
+             size = 1.5) +
+  labs(x = paste("PC1 (", percent(prop.pca[1]), ")"),
+       y = paste("PC2 (", percent(prop.pca[2]), ")"),
+       title = "PCA Projection") + 
+  theme_bw(base_size = 8)
+
+grid.arrange(p1, p2)
+```
+<br/>
+
+
+## PCA
+
+```{r pcadata}
+# Generates sample matrix of five discrete clusters that have very different 
+# mean and standard deviation values.
+z1 <- rnorm(10000, mean = 1, sd = 1)
+z2 <- rnorm(10000, mean = 3, sd = 3)
+z3 <- rnorm(10000, mean = 5, sd = 5)
+z4 <- rnorm(10000, mean = 7, sd = 7)
+z5 <- rnorm(10000, mean = 9, sd = 9)
+pca.data <- matrix(c(z1, z2, z3, z4, z5), 2500, 20, byrow = T, 
+                   dimnames = list(paste0("R", 1:2500), 
+                                   paste0("C", 1:20)))
+```
+
+```{r pca}
+pca <- prcomp(pca.data, scale = T)
+summary(pca)$importance[, 1:5]
+```
+
+```{r pcaplot, echo=FALSE, fig.width=15, fig.height=5}
+require(geneplotter)
+require(scatterplot3d)
+mycolors <- adjustcolor(brewer.pal(5, "Set2"), alpha.f = 0.8)
+par(mfrow = c(1, 3))
+plot(pca$x, pch = 20, col = mycolors[rep(1:5, each = 500)])
+# shows the density of the data points
+smoothScatter(pca$x, colramp = colorRampPalette(brewer.pal(11, "RdYlGn")), 
+              nbin = 256, nrpoints = 0) 
+scatterplot3d(pca$x[, 1:3], pch = 20, color = mycolors[rep(1:5, each = 500)])
+```
+<br/>
+
+
+## MDS
+
+We will use the `UScitiesD` dataset that gives the straight line distances between 10 cities in the US.
+
+```{r mds}
+# inspect first five elements
+as.matrix(UScitiesD)[1:5, 1:5]
+
+model.mds <- cmdscale(UScitiesD)
+model.mds
+```
+
+```{r mdsplot, echo=FALSE}
+n <- nrow(model.mds)
+net <- network(matrix(1, n, n), directed = FALSE,
+               vertex.attr = list(vertex.names = rownames(model.mds)))
+ggnet2(net, mode = model.mds, color = "gold", label.color = "grey30",
+       edge.color = "wheat2", size = 15, label = "vertex.names", label.size = 3) +
+  coord_fixed(ratio = 1) +
+  scale_x_continuous(expand = c(0.15, 0), breaks = NULL) +
+  scale_y_continuous(expand = c(0.15, 0), breaks = NULL) +
+  ggtitle("MDS clustering of US City-City Distances")
+```
+
+
+
+
+
