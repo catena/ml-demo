@@ -12,6 +12,7 @@ library(network)
 library(GGally)
 library(MASS)
 library(RColorBrewer)
+library(caret)
 data(iris)
 data(UScitiesD)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -28,11 +29,18 @@ set.seed(1208151)
 
 ## LDA
 
+The LDA method approximates the Bayes classifier assuming that the $p$-dimensional random variable $X$ is drawn from a multivariate Gaussian distribution ${\mathcal N}(\mu ,\, \mathbf\Sigma)$. The classifier assigns an observation $X = x$ to the class for which
+$$
+\hat\delta_k(x) = x^T \mathbf\Sigma^{-1} \mu_k - \frac{1}{2} \mu_k^T \mathbf\Sigma^{-1} \mu_k + \log {\pi_k}
+$$
+is largest. $\hat\delta_k(x)$ is the discriminant function, and $\pi_k$ is the class membership probability.
+
 ```{r lda}
 model.lda <- lda(Species ~ ., iris, prior = c(1, 1, 1) / 3)
 model.lda$means
 model.lda$scaling
 model.lda$svd
+confusionMatrix(predict(model.lda)$class, iris$Species)$table
 ```
 
 ```{r ldaplot, echo=FALSE}
@@ -68,18 +76,52 @@ grid.arrange(p1, p2)
 ```
 <br/>
 
+## QDA
+Unlike LDA, QDA assumes that each class has its own covariance matrix. That is, it assumes that an observation from the $k$th class is of the form $X \sim {\mathcal N} (\mu_k ,\, \mathbf\Sigma_k)$.
+$$
+\hat\delta_k(x) = -\frac{1}{2} {(x - \mu_k)}^T \Sigma_k^{-1} (x - \mu_k) -\frac{1}{2} \log {|\mathbf\Sigma_k|} + \log {\pi_k}
+$$
+
+```{r qda}
+model.qda <- qda(Species ~ ., iris, prior = c(1, 1, 1) / 3)
+model.qda$means
+ftable(model.qda$scaling, row.vars = c(1, 3))
+confusionMatrix(predict(model.qda)$class, iris$Species)$table
+```
+
+```{r qdaplt, echo=FALSE, fig.width=7, fig.height=4}
+require(mlr)
+# classif.qda uses MASS::qda
+model.qdaplt <- makeLearner("classif.qda")
+configureMlr(on.par.without.desc = "quiet")
+plotLearnerPrediction(model.qdaplt, iris.task, prior = c(1, 1, 1) / 3,
+                      gridsize = 250) +
+  theme_bw(base_size = 8)
+```
+<br/>
+
 
 ## PCA
+
+Rotates the axes of original variable coordinate system to new orthogonal axes, called principal components, such that the new axes coincide with the directions of maximum variation of the original observations. The first principal component of a set of features $X_1, X_2,\ldots, X_p$ is the normalized linear combination of the features
+$$
+Z_1 = \phi_{11} X_1 + \phi_{21} X_2 + \ldots + \phi_{p1} X_p
+$$
+that has the largest variance. Assuming that the features in $\mathbf X$ has been centered, $Z_1$ solves the optimization problem
+$$
+\underset {\phi_{11}, \ldots, \phi_{p1}}{\arg \max} \left\{ \frac{1}{n} \sum_{i=1}^n {\left( \sum_{j=1}^p \phi_{j1} x_{ij}\right)}^2 \right\} \text {  subject to } \sum_{j=1}^p \phi_{j1}^2 = 1.
+$$
+At the $k$-th stage a linear function $\boldsymbol\phi_k^T \mathbf x$ is found that has maximum variance subject to being uncorrelated with $Z_1, Z_2, \ldots, Z_{k-1}$.
 
 ```{r pcadata}
 # Generates sample matrix of five discrete clusters that have very different 
 # mean and standard deviation values.
-z1 <- rnorm(10000, mean = 1, sd = 1)
-z2 <- rnorm(10000, mean = 3, sd = 3)
-z3 <- rnorm(10000, mean = 5, sd = 5)
-z4 <- rnorm(10000, mean = 7, sd = 7)
-z5 <- rnorm(10000, mean = 9, sd = 9)
-pca.data <- matrix(c(z1, z2, z3, z4, z5), 2500, 20, byrow = T, 
+pca.data <- matrix(c(rnorm(10000, mean = 1, sd = 1), 
+                     rnorm(10000, mean = 3, sd = 3),
+                     rnorm(10000, mean = 5, sd = 5),
+                     rnorm(10000, mean = 7, sd = 7),
+                     rnorm(10000, mean = 9, sd = 9)), 
+                   nrow = 2500, ncol = 20, byrow = T, 
                    dimnames = list(paste0("R", 1:2500), 
                                    paste0("C", 1:20)))
 ```
@@ -103,7 +145,21 @@ scatterplot3d(pca$x[, 1:3], pch = 20, color = mycolors[rep(1:5, each = 500)])
 <br/>
 
 
-## MDS
+## Classical MDS
+
+Classical MDS rests on the following equation: Let $X$ be the $n \times p$ matrix of point coordinates (assumed here to be column-centered for simplicity); then, the matrix of squared Euclidean distances with elements $d_{ij}(\mathbf X) = \sum_{s=1}^p (x_{is} - x_{js})^2$ is
+$$
+\mathbf D^{(2)} = \mathbf {1 \boldsymbol\alpha'} + \mathbf {\boldsymbol\alpha 1'} - 2 \mathbf {X X'}
+$$
+where $\mathbf 1$ is a vector of ones of appropriate length and $\boldsymbol\alpha$ the vector with diagonal elements of $\mathbf {XX'}$. Given $\mathbf D$, $\mathbf X$ is found as follows. Let $\mathbf J = \mathbf I -  \mathbf {11'} / \mathbf {1'1}$ be the centering matrix,  $-1/2 \, \mathbf J \mathbf D^{(2)} \mathbf J = \mathbf {XX'}$. Then the eigendecomposition of $-1/2 \, \mathbf J \mathbf D^{(2)} \mathbf J$ is $\mathbf {Q \Lambda Q'}$, and so $\mathbf X = \mathbf Q \mathbf\Lambda^{1/2}$. If the matrix of dissimilarities $\mathbf\Delta$ is not euclidean it can be approximated by $\mathbf\Delta^{(2)}$ for $\mathbf D^{(2)}$.
+
+ 
+Classical MDS minimizes the *Strain loss* function
+$$
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+Strain(\mathbf X) = \norm {(-1 / 2 \, \mathbf J \mathbf\Delta^{(2)} \mathbf J) - \mathbf {XX'}} ^2
+$$
+
 
 We will use the `UScitiesD` dataset that gives the straight line distances between 10 cities in the US.
 
