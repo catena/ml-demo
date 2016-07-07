@@ -64,7 +64,7 @@ We will regress the *mpg* variable onto *disp, cyl, am*. A linear model is fitte
 
 Objective:
 $$
-{\hat {\boldsymbol {\beta }}}={\rm {arg}}\min _{\boldsymbol \beta }\,\lVert \mathbf {y}-\mathbf {X}{\boldsymbol \beta } \rVert ,
+{\hat {\boldsymbol {\beta }}}={\rm {arg}}\min _{\boldsymbol \beta }\,\left\lVert \mathbf {y}-\mathbf {X}{\boldsymbol \beta } \right\rVert ,
 $$
 
 which leads to:

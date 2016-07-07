@@ -26,7 +26,8 @@ OLS regression fits a linear model with coefficients $w = (w_1, ..., w_p)$ to mi
 
 Mathematically, it tries to minimize the objective function:  
 $$
-\underset{w}{min\,} {|| X w - y||_2}^2
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\underset{w}{min\,} \norm {X w - y}_2^2
 $$
 
 ##### Ridge Regression
@@ -34,7 +35,7 @@ Ridge regression imposes a penalty on the size of coefficients. Here, $\alpha \g
 
 Objective to minimize:  
 $$
-\underset{w}{min\,} {{|| X w - y||_2}^2 + \alpha\, {||w||_2}^2}
+\underset{w}{min\,} {\norm {X w - y}_2^2 + \alpha\, \norm w_2^2}
 $$
 
 ##### Lasso Regression
@@ -42,7 +43,7 @@ Mathematically, it consists of a linear model trained with $\ell_1$ prior as reg
 
 Objective to minimize:
 $$
-\underset{w}{min\,} { \frac{1}{2n_{samples}} ||X w - y||_2 ^ 2 + \alpha\, ||w||_1}
+\underset{w}{min\,} { \frac{1}{2n_{samples}} \norm {X w - y}_2 ^ 2 + \alpha\, \norm w_1}
 $$
 
 ##### Elastic Net Regression
@@ -50,7 +51,7 @@ ElasticNet is a linear regression model trained with $\ell_1$ and $\ell_2$ prior
 
 Objective to minimize:  
 $$
-\underset{w}{min\,} { \frac{1}{2n_{samples}} ||X w - y||_2 ^ 2 + \alpha   \rho ||w||_1 +\frac{\alpha(1-\rho)}{2} ||w||_2 ^ 2}
+\underset{w}{min\,} { \frac{1}{2n_{samples}} \norm {X w - y}_2^2 + \alpha \rho \norm w_1 +\frac{\alpha(1-\rho)}{2} \norm w_2^2}
 $$
 
 ## Dataset
@@ -66,7 +67,7 @@ str(model.data)
 
 We will use the R `glmnet` package for regressing the _Salary_ of the baseball players. In `glmnet`, the penalty on the coefficient vector is defined as
 $$
-\frac{1-\alpha}{2} ||\beta_j||_2^2 + \alpha\, ||\beta_j||_2,
+\frac{1-\alpha}{2} \norm {\beta_j}_2^2 + \alpha\, \norm {\beta_j}_1,
 $$
 where $\alpha=1$ is the lasso penalty, and $\alpha=0$ the ridge penalty. For $0 < \alpha < 1$ you get the elastic net model.
 
