@@ -91,6 +91,7 @@ confusionMatrix(predict(model.qda)$class, iris$Species)$table
 ```
 
 ```{r qdaplt, echo=FALSE, fig.width=7, fig.height=4}
+# NOTE: plotLearnerPrediction trains the model only for 1 or 2 features. This isn't the expected result. The required figure is the decision boundary in a reduced QDA variable space, of the model trained with all features.
 require(mlr)
 # classif.qda uses MASS::qda
 model.qdaplt <- makeLearner("classif.qda")
