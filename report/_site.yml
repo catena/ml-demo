@@ -1,5 +1,4 @@
 name: "Machine Learning"
-css: custom.css
 output_dir: ../_site
 include: ["../css/custom.css"]
 exclude: ["*.ipynb", "*.py", "Makefile"]
@@ -9,5 +8,3 @@ output:
     toc_float:
       collapsed: false
     theme: readable
-
-
